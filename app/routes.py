@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, send_file, Response
 import pandas as pd
 import os
+import io
 from .serpapi_client import fetch_search_results
 from .groq_client import get_llm_results
 
@@ -58,4 +59,24 @@ def search():
         else:
             results[entity] = "No search results found"
 
+    # Save results to a global variable for downloading
+    global search_results_data
+    search_results_data = pd.DataFrame(list(results.items()), columns=["Entity", "Response"])
     return jsonify(results)
+
+@main.route("/download_results", methods=["GET"])
+def download_results():
+    global search_results_data
+    if search_results_data is None or search_results_data.empty:
+        return jsonify({"error": "No results available for download"}), 400
+
+    # Convert DataFrame to CSV
+    output = io.StringIO()
+    search_results_data.to_csv(output, index=False)
+    output.seek(0)
+
+    return Response(
+        output,
+        mimetype='text/csv',
+        headers={"Content-Disposition": "attachment;filename=search_results.csv"}
+    )

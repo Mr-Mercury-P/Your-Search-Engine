@@ -25,4 +25,8 @@ Search API -> SerpAPI
 
 GROQ API
 
-Python app.py
+update config.py file with your api keys
+
+Python main.py
+
+checkout user guide for more details

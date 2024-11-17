@@ -33,7 +33,10 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        .form-section label, .form-section input, .form-section select, .form-section button {
+        .form-section label,
+        .form-section input,
+        .form-section select,
+        .form-section button {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -63,6 +66,19 @@
         .result-item p {
             margin: 0;
             font-size: 1rem;
+        }
+        #downloadBtn {
+            display: none;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #downloadBtn:hover {
+            background-color: #007B9A;
         }
         @media (max-width: 768px) {
             .result-item {
@@ -101,6 +117,7 @@
 
         <!-- Results Section -->
         <div id="results" class="results-section"></div>
+        <button id="downloadBtn">Download Results as CSV</button>
     </div>
 
     <script>
@@ -108,32 +125,34 @@
         const queryForm = document.getElementById("queryForm");
         const columnSelect = document.getElementById("column");
         const resultsDiv = document.getElementById("results");
-        let uploadedFilePath; // Variable to store file path returned by server
+        const downloadBtn = document.getElementById("downloadBtn");
+        let uploadedFilePath;
 
+        // Handle file upload
         uploadForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const formData = new FormData(uploadForm);
 
             fetch("/upload", { method: "POST", body: formData })
-                .then((response) => response.json())
-                .then((data) => {
+                .then(response => response.json())
+                .then(data => {
                     if (data.error) {
-                        alert(data.error); // Show error from backend
+                        alert(data.error);
                         return;
                     }
 
-                    // Populate the dropdown with column names
+                    // Populate columns dropdown
                     if (data.columns && data.columns.length > 0) {
                         columnSelect.innerHTML = data.columns
-                            .map((col) => `<option value="${col}">${col}</option>`)
+                            .map(col => `<option value="${col}">${col}</option>`)
                             .join("");
-                        uploadedFilePath = data.file_path; // Save file path
-                        queryForm.style.display = "block"; // Show query form
+                        uploadedFilePath = data.file_path;
+                        queryForm.style.display = "block";
                     } else {
                         alert("No columns found in the uploaded file.");
                     }
                 })
-                .catch((err) => console.error("Error uploading file:", err));
+                .catch(err => console.error("Error uploading file:", err));
         });
 
         // Handle search
@@ -141,35 +160,42 @@
             const column = columnSelect.value;
             const prompt = document.getElementById("prompt").value;
 
-            // Validate input
             if (!column || !prompt) {
                 alert("Please select a column and enter a query template.");
                 return;
             }
 
-            // POST to /search endpoint
             fetch("/search", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ column, prompt, file_path: uploadedFilePath }),
             })
-                .then((response) => response.json())
-                .then((results) => {
+                .then(response => response.json())
+                .then(results => {
                     if (results.error) {
-                        alert(results.error); // Show error if any
+                        alert(results.error);
                     } else {
-                        // Display search results
+                        // Display results
                         resultsDiv.innerHTML = Object.entries(results)
                             .map(([entity, result]) => `
                                 <div class="result-item">
                                     <p><strong>Entity:</strong> ${entity}</p>
                                     <p><strong>Response:</strong> ${result}</p>
                                 </div>
-                            `)
-                            .join("");
+                            `).join("");
+
+                        // Show download button if results are available
+                        if (Object.keys(results).length > 0) {
+                            downloadBtn.style.display = "block";
+                        }
                     }
                 })
-                .catch((err) => console.error("Error performing search:", err));
+                .catch(err => console.error("Error performing search:", err));
+        });
+
+        // Handle download
+        downloadBtn.addEventListener("click", () => {
+            window.location.href = "/download_results";
         });
     </script>
 </body>

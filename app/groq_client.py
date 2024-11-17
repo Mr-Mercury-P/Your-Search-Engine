@@ -11,7 +11,7 @@ def get_llm_results(query, text):
             messages=[
                 {
                     "role": "user",
-                    "content": f"{query} directly from the text {text[:500]}"
+                    "content": f"{query} directly from the text without extra text {text[:500]}"
                 }
             ],
             model="mixtral-8x7b-32768",
