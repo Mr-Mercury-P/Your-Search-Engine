@@ -25,8 +25,17 @@ Search API -> SerpAPI
 
 GROQ API
 
+<<<<<<< HEAD
 update config.py file with your api keys
 
 Python main.py
 
 checkout user guide for more details
+=======
+replace SerpAPI key and 
+GROQ API key with your private keys
+
+Python main.py
+
+Check Out User Guide pdf 
+>>>>>>> cb8224ed7aec3668bfb5e950e3b7311160659417
