@@ -1,0 +1,5 @@
+Flask
+pandas
+serpapi
+groqapi
+google-api-python-client

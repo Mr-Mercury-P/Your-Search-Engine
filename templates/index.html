@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        .form-section, .results-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-section label, .form-section input, .form-section select, .form-section button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .form-section button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .result-item {
+            background-color: #f8f8f8;
+            border-radius: 6px;
+            margin: 10px;
+            padding: 15px;
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+        }
+        .result-item p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        @media (max-width: 768px) {
+            .result-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI Agent Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <!-- Form for CSV Upload -->
+        <div class="form-section">
+            <h2>Upload CSV File</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label for="file">Upload CSV:</label>
+                <input type="file" id="file" name="file" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
+        <!-- Query Form (Hidden Initially) -->
+        <div id="queryForm" class="form-section" style="display:none;">
+            <h2>Configure Query</h2>
+            <label for="column">Select Column:</label>
+            <select id="column"></select>
+            <br>
+            <label for="prompt">Query Template:</label>
+            <input type="text" id="prompt" placeholder="Enter your query template" required>
+            <br>
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results-section"></div>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById("uploadForm");
+        const queryForm = document.getElementById("queryForm");
+        const columnSelect = document.getElementById("column");
+        const resultsDiv = document.getElementById("results");
+        let uploadedFilePath; // Variable to store file path returned by server
+
+        uploadForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(uploadForm);
+
+            fetch("/upload", { method: "POST", body: formData })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        alert(data.error); // Show error from backend
+                        return;
+                    }
+
+                    // Populate the dropdown with column names
+                    if (data.columns && data.columns.length > 0) {
+                        columnSelect.innerHTML = data.columns
+                            .map((col) => `<option value="${col}">${col}</option>`)
+                            .join("");
+                        uploadedFilePath = data.file_path; // Save file path
+                        queryForm.style.display = "block"; // Show query form
+                    } else {
+                        alert("No columns found in the uploaded file.");
+                    }
+                })
+                .catch((err) => console.error("Error uploading file:", err));
+        });
+
+        // Handle search
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const column = columnSelect.value;
+            const prompt = document.getElementById("prompt").value;
+
+            // Validate input
+            if (!column || !prompt) {
+                alert("Please select a column and enter a query template.");
+                return;
+            }
+
+            // POST to /search endpoint
+            fetch("/search", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ column, prompt, file_path: uploadedFilePath }),
+            })
+                .then((response) => response.json())
+                .then((results) => {
+                    if (results.error) {
+                        alert(results.error); // Show error if any
+                    } else {
+                        // Display search results
+                        resultsDiv.innerHTML = Object.entries(results)
+                            .map(([entity, result]) => `
+                                <div class="result-item">
+                                    <p><strong>Entity:</strong> ${entity}</p>
+                                    <p><strong>Response:</strong> ${result}</p>
+                                </div>
+                            `)
+                            .join("");
+                    }
+                })
+                .catch((err) => console.error("Error performing search:", err));
+        });
+    </script>
+</body>
+</html>
