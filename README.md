@@ -75,7 +75,7 @@ This project is an AI-driven agent designed for automated web search, data extra
 ---
 
 ## Loom Video
-- [Click](https://youtu.be/Agg-tfOtBmk?si=_HAPwwC3a7gGU9Jm)
+- [Click Here](https://youtu.be/Agg-tfOtBmk?si=_HAPwwC3a7gGU9Jm)
 
 
 
