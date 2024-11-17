@@ -25,4 +25,4 @@ Search API -> SerpAPI
 
 GROQ API
 
-Python app.py
+Python main.py
