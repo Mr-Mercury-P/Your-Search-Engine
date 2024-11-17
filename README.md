@@ -1,41 +1,109 @@
-# AI Agent for Data Retrieval and Parsing
+# AI Agent
 
-This project is an AI-powered agent designed to extract and structure information from datasets using web search and language models. Users can upload a file, define search queries, and retrieve relevant data for specified entities. The output is presented in an intuitive dashboard.
+This project is an AI-driven agent designed for automated web search, data extraction, and information processing. The agent integrates APIs, processes user-uploaded files, and provides an interactive dashboard for seamless user interaction.
+
+---
+
+## Features
+
+- **User Dashboard**: Upload CSV files, input custom queries, and view/download results.
+- **Web Search**: Uses SerpAPI to extract data from the web.
+- **AI Integration**: Leverages Groq API for advanced data processing.
+- **Dynamic Query Management**: Supports placeholder replacement in queries (e.g., `{company}`).
+- **Data Handling**: Processes user files and integrates web-scraped data with uploaded datasets.
+- **CSV Export**: Allows easy download of processed data for further analysis.
+
+---
 
 
+---
 
-Features
+## Installation
 
-Upload CSV files for data input.
-Dynamically input search queries with placeholders for entities.
-Retrieve structured data using web search APIs and LLMs.
-Intuitive dashboard for previewing results.
-Error handling for failed queries and rate-limiting scenarios.
+### Prerequisites
+- Python 3.10 or higher
+- [pip](https://pip.pypa.io/en/stable/)
+- [SerpAPI key](https://serpapi.com/)
+- (Optional) [OpenAI/Groq API key](https://openai.com/)
+---
 
+### Setup Instructions
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Mr-Mercury-P/Your-Search-Engine
+   cd Your-Search-Engine
+   ```
 
-# Setup Instructions
-Prerequisites
-Python (v3.8 or later)
+2. Set up a virtual environment:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate   # On Windows: .venv\Scripts\activate
+   ```
 
-Pip (Python package manager)
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-API keys for:
+4. Configure environment variables:
+   - Create a `.env` file in the `env/` directory with:
+     ```
+     SERPAPI_KEY=your_serpapi_key
+     OPENAI_API_KEY=your_openai_api_key
+     ```
 
-Search API -> SerpAPI
+5. Run the application:
+   ```bash
+   python main.py
+   ```
 
-GROQ API
+6. Access the dashboard:
+   - Open `http://localhost:5000` in your browser.
 
-<<<<<<< HEAD
-update config.py file with your api keys
+---
 
-Python main.py
+## Usage
 
-checkout user guide for more details
-=======
-replace SerpAPI key and 
-GROQ API key with your private keys
+1. **Upload Files**: Add CSV files (e.g., Items) to the dashboard.
+2. **Enter Query**: Input a dynamic query using placeholders, such as:
+   ```
+   "Find the Price of {Item}"
+   ```
+3. **View Results**: Review extracted data on the dashboard.
+4. **Export Data**: Download the processed data as a CSV.
 
-Python main.py
+---
 
-Check Out User Guide pdf 
->>>>>>> cb8224ed7aec3668bfb5e950e3b7311160659417
+## Contribution
+
+Contributions are welcome! Please follow these steps:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add feature-name"
+   ```
+4. Push to your fork:
+   ```bash
+   git push origin feature-name
+   ```
+5. Submit a pull request.
+
+---
+
+## Acknowledgments
+
+- **SerpAPI** for enabling web scraping.
+- **Groq** for natural language processing.
+- **Pandas** for data manipulation.
+- **Flask** for the dashboard framework.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for more details.
+```
