@@ -46,7 +46,7 @@ This project is an AI-driven agent designed for automated web search, data extra
    ```
 
 4. Configure environment variables:
-   - Create a `.env` file in the `env/` directory with:
+   - Create a `config.py` file with:
      ```
      SERPAPI_KEY=your_serpapi_key
      OPENAI_API_KEY=your_openai_api_key
