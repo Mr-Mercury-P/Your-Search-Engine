@@ -29,3 +29,5 @@ replace SerpAPI key and
 GROQ API key with your private keys
 
 Python main.py
+
+Check Out User Guide pdf 
