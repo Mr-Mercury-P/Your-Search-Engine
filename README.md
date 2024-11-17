@@ -24,7 +24,7 @@ This project is an AI-driven agent designed for automated web search, data extra
 - Python 3.10 or higher
 - [pip](https://pip.pypa.io/en/stable/)
 - [SerpAPI key](https://serpapi.com/)
-- (Optional) [OpenAI/Groq API key](https://openai.com/)
+- [Groq API key](https://console.groq.com/keys)
 ---
 
 ### Setup Instructions
