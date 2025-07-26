@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Agent Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -177,12 +176,13 @@
                     } else {
                         // Display results
                         resultsDiv.innerHTML = Object.entries(results)
-                            .map(([entity, result]) => `
-                                <div class="result-item">
-                                    <p><strong>Entity:</strong> ${entity}</p>
-                                    <p><strong>Response:</strong> ${result}</p>
-                                </div>
-                            `).join("");
+    .map(([entity, result]) => `
+        <div class="result-item">
+            <p><strong>Entity:</strong> ${entity}</p>
+            <p><strong>Response:</strong> ${result}</p>
+        </div>
+    `).join("");
+
 
                         // Show download button if results are available
                         if (Object.keys(results).length > 0) {

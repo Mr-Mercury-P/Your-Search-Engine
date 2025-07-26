@@ -11,10 +11,10 @@ def get_llm_results(query, text):
             messages=[
                 {
                     "role": "user",
-                    "content": f"{query} directly from the text without extra text {text[:500]}"
+                    "content": f"{query} directly from the text {text[:500]}"
                 }
             ],
-            model="mixtral-8x7b-32768",
+            model="llama3-70b-8192",  # ✅ Updated model
         )
         return chat_complete.choices[0].message.content if chat_complete.choices else "No response from GroqAPI"
     except Exception as e:
